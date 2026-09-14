@@ -20,9 +20,24 @@ thead th{height:38px;background:#22262c;position:sticky;top:0;z-index:4;font-siz
 .task{position:sticky;left:0;z-index:3;width:var(--tw);min-width:var(--tw);max-width:var(--tw);text-align:left;padding:0 6px;background:#151a1d;font-weight:800;font-size:11px;white-space:nowrap;overflow:hidden;border-right:3px solid #aab4c0}
 thead .task{z-index:7}
 .acct,.skip{width:var(--cw);min-width:var(--cw);max-width:var(--cw)}
-input[type=checkbox]{width:22px;height:22px;margin:0;accent-color:#e9ecef}
-input[type=checkbox]:disabled{opacity:.55}
-.section td{height:26px;background:#2a1715;color:#ff745f;font-weight:900;letter-spacing:.8px;text-align:left;padding-left:7px;font-size:10px}
+
+ input[type=checkbox]{
+width:22px;
+height:22px;
+margin:0;
+accent-color:white;
+}
+
+input[type=checkbox]:checked{
+accent-color:white;
+filter:contrast(300%);
+}
+
+input[type=checkbox]:disabled{
+opacity:1;
+}
+ 
+ .section td{height:26px;background:#2a1715;color:#ff745f;font-weight:900;letter-spacing:.8px;text-align:left;padding-left:7px;font-size:10px}
 .section .task{background:#2a1715;color:#ff745f}
 .grip{position:fixed;left:108px;top:53px;z-index:20;width:18px;height:30px;background:#66707b;border-radius:8px;touch-action:none}
 .grip:after{content:"↔";display:block;text-align:center;line-height:30px;font-size:12px}
