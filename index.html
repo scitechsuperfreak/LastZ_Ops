@@ -2,1132 +2,168 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111318">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#181b1f">
 <link rel="manifest" href="manifest.webmanifest">
-
-<title>FATL LastZ Ops</title>
-
+<title>LastZ Ops</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <style>
-:root{
-  --taskW:120px;
-  --topH:48px;
-  --headH:38px;
-  --rowH:39px;
-  --colW:58px;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  background:#0d0f12;
-  color:#f4f5f7;
-  font-family:Arial,sans-serif;
-  overflow:hidden;
-}
-
-.top{
-  height:var(--topH);
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:5px 7px;
-  background:#15181d;
-  border-bottom:1px solid #40464f;
-}
-
-.brand{
-  font-weight:900;
-  font-size:14px;
-  white-space:nowrap;
-}
-
-.brand b{
-  color:#ef3b22;
-}
-
-.sub{
-  font-size:8px;
-  color:#9fa7b1;
-  white-space:nowrap;
-}
-
-.spacer{
-  flex:1;
-}
-
-.btn{
-  background:#252a31;
-  color:#fff;
-  border:1px solid #555d68;
-  border-radius:6px;
-  padding:6px 8px;
-  font-weight:800;
-  font-size:10px;
-}
-
-.btn.danger{
-  background:#7c2018;
-}
-
-.wrap{
-  height:calc(100vh - var(--topH));
-  overflow:auto;
-  overscroll-behavior:contain;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:
-    var(--taskW)
-    repeat(6,var(--colW))
-    var(--colW);
-  min-width:calc(var(--taskW) + (7 * var(--colW)));
-  width:max-content;
-}
-
-.cell{
-  min-width:0;
-  height:var(--rowH);
-  border-right:1px solid #303640;
-  border-bottom:1px solid #303640;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#0f1114;
-}
-
-.hdr{
-  position:sticky;
-  top:0;
-  z-index:30;
-  height:var(--headH);
-  min-height:var(--headH);
-  background:#22262c;
-  font-size:10px;
-  font-weight:900;
-}
-
-.taskhead,
-.task{
-  position:sticky;
-  left:0;
-  z-index:25;
-  width:var(--taskW);
-  min-width:var(--taskW);
-  max-width:var(--taskW);
-  justify-content:flex-start;
-  padding-left:6px;
-  padding-right:4px;
-  background:#151a1d;
-  font-weight:800;
-  white-space:nowrap;
-  overflow:hidden;
-  border-right:3px solid #aab4c0;
-}
-
-.taskhead{
-  z-index:50;
-  font-size:11px;
-}
-
-.task{
-  font-size:11px;
-}
-
-.acct,
-.skiphead{
-  width:var(--colW);
-  min-width:var(--colW);
-  max-width:var(--colW);
-}
-
-.section{
-  height:26px;
-  min-height:26px;
-  background:#2a1715 !important;
-  color:#ff745f;
-  font-weight:900;
-  letter-spacing:.8px;
-  font-size:10px;
-}
-
-.section.task{
-  background:#2a1715 !important;
-}
-
-input[type=checkbox]{
-  appearance:none;
-  -webkit-appearance:none;
-
-  width:20px;
-  height:20px;
-  margin:0;
-
-  border:1px solid #777;
-  border-radius:0;
-
-  background:#fff;
-}
-
-input[type=checkbox]:checked{
-  background-color:#fff;
-
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 10l4 4L17 4' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E");
-
-  background-repeat:no-repeat;
-  background-position:center;
-  background-size:18px 18px;
-}
-
-input[type=checkbox]:disabled{
-  opacity:1;
-}
-
-#resizeHandle{
-  position:fixed;
-  top:53px;
-  left:calc(var(--taskW) - 9px);
-
-  width:18px;
-  height:30px;
-
-  z-index:100;
-  background:#66707b;
-  border-radius:8px;
-
-  cursor:col-resize;
-  touch-action:none;
-}
-
-#resizeHandle:after{
-  content:"↔";
-  display:block;
-  text-align:center;
-  line-height:30px;
-  font-size:12px;
-}
-
-.splash{
-  position:fixed;
-  inset:0;
-
-  background:#050505;
-
-  z-index:500;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-
-  text-align:center;
-
-  transition:.25s;
-}
-
-.splash.hide{
-  opacity:0;
-  pointer-events:none;
-}
-
-.fatl{
-  font-size:58px;
-  font-weight:1000;
-  letter-spacing:-5px;
-}
-
-.fatl span{
-  color:#ef321b;
-}
-
-.splash h2{
-  margin:3px;
-  color:#ef321b;
-  letter-spacing:2px;
-  font-size:12px;
-}
-
-.splash p{
-  color:#bbb;
-  letter-spacing:1.5px;
-  font-size:9px;
-}
+:root{--taskW:150px;--topH:48px;--headH:42px;--rowH:42px}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#0f1113;color:#f2f2f2;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
+.top{height:var(--topH);display:flex;align-items:center;gap:8px;padding:0 8px;background:#181b1f;border-bottom:2px solid #4e545b;position:relative;z-index:200}
+.title{font-size:15px;font-weight:900;white-space:nowrap;flex:1}
+.status{font-size:9px;color:#aeb4bb;font-weight:800;white-space:nowrap}
+.top button{min-height:32px;padding:0 10px;border-radius:6px;border:1px solid #747d86;background:#292d32;color:#eee;font-weight:900;font-size:11px}
+.scroller{height:calc(100vh - var(--topH));overflow:auto;overscroll-behavior:contain}
+.grid{display:grid;grid-template-columns:var(--taskW) repeat(6,72px) 62px;min-width:calc(var(--taskW) + 494px);position:relative}
+.cell{min-width:0;border-bottom:1px solid #34383d;border-right:1px solid #34383d;display:flex;align-items:center;justify-content:center;background:#0f1113}
+.hdr{position:sticky;top:0;z-index:30;height:var(--headH);min-height:var(--headH);background:#25292e;border-bottom:2px solid #69717a;font-weight:900}
+.taskhead,.task{position:sticky;left:0;justify-content:flex-start;padding-left:10px;padding-right:8px;background:#171a1d;border-right:4px solid #a4adb6;overflow:hidden}
+.taskhead{z-index:60;font-size:13px}
+.task{z-index:25;height:var(--rowH);min-height:var(--rowH);font-size:12.5px;font-weight:750;white-space:nowrap;text-overflow:clip}
+.acct,.skiphead{font-size:11px;text-align:center;padding:0 2px}
+.checkcell,.skipcell{height:var(--rowH);min-height:var(--rowH)}
+.skipcell{background:#15181b;border-left:2px solid #59616a}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:28px;height:28px;margin:0;border:2px solid #aeb7c2;border-radius:6px;background:#0d0f11}
+input[type=checkbox]:checked{background:#edf0f3;border-color:#edf0f3;position:relative}
+input[type=checkbox]:checked:after{content:"✓";position:absolute;left:4px;top:-5px;color:#111;font-size:24px;font-weight:1000}
+input[type=checkbox]:disabled{opacity:.68}
+input[type=checkbox]:disabled:checked{background:#8e979f;border-color:#8e979f}
+#resizeHandle{position:fixed;top:var(--topH);left:calc(var(--taskW) - 9px);width:18px;height:calc(100vh - var(--topH));z-index:120;cursor:col-resize;touch-action:none;background:transparent}
+#resizeHandle:after{content:"";display:block;width:4px;height:100%;margin:auto;background:#a5adb6;opacity:.95}
+.controls{display:flex;gap:8px;flex-wrap:wrap;padding:8px 10px 12px;min-width:calc(var(--taskW) + 494px);background:#15181b;border-top:2px solid #444}
+.controls button,.settings button,.settings select{min-height:38px;border:1px solid #747d86;border-radius:7px;background:#292d32;color:#eee;font-weight:900;font-size:12px;padding:0 12px}
+.settings{display:none;position:fixed;left:10px;right:10px;top:58px;z-index:500;background:#1b1f23;border:1px solid #5b626a;border-radius:10px;padding:12px;box-shadow:0 10px 30px #000a}
+.settings.show{display:block}
+.settings h3{margin:0 0 10px;font-size:15px}
+.settings .line{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.settings label{font-size:12px;color:#d7dce0}
+.settings select{padding:0 8px}
+.note{font-size:10px;color:#aeb4bb;line-height:1.35}
 </style>
 </head>
-
 <body>
-
-<div id="splash" class="splash">
-  <div class="fatl">FAT<span>L</span></div>
-  <h2>FATAL ASSAULT TACTICAL LEGION</h2>
-  <p>FAMILY ALWAYS TOGETHER LEGENDARY</p>
+<div id="splash" style="position:fixed;inset:0;z-index:9999;background:#050505;display:flex;align-items:center;justify-content:center;transition:opacity .4s ease"><img src="splash.png" alt="FATL LastZ Ops — MoDiamonds T10s Foundation" style="width:100%;height:100%;object-fit:contain;background:#050505"></div>
+<div class="top">
+  <div class="title"><b style="color:#ef321b">FATL</b> · LastZ Ops</div>
+  <button id="newDayTop">NEW DAY</button>
+  <button id="settingsBtn">⚙</button>
+  <div class="status" id="saved">SAVED</div>
 </div>
 
-<header class="top">
-
-  <div>
-    <div class="brand">
-      <b>FATL</b> • LAST Z OPS
-    </div>
-
-    <div class="sub">
-      Fortune Accumulates Through Logistics
-    </div>
+<div class="settings" id="settingsPanel">
+  <h3>Settings / Backup</h3>
+  <div class="line">
+    <label for="day7Select">Weekly Day 7:</label>
+    <select id="day7Select">
+      <option value="0">Sunday</option><option value="1">Monday</option><option value="2">Tuesday</option>
+      <option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option>
+    </select>
   </div>
-
-  <div class="spacer"></div>
-
-  <span id="status" class="sub">
-    SAVED
-  </span>
-
-  <button id="backup" class="btn">
-    BACKUP
-  </button>
-
-  <button id="newDay" class="btn danger">
-    NEW DAY
-  </button>
-
-</header>
+  <div class="line">
+    <button id="exportBtn">EXPORT BACKUP</button>
+    <button id="importBtn">IMPORT BACKUP</button>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </div>
+  <div class="line"><button id="closeSettings">CLOSE</button></div>
+  <div class="note">FP: Tech is active Wednesday only. Saga and Battlefield Breakout are active Saturday/Sunday only. Weekly Day 7 tasks appear only on the selected weekday.</div>
+</div>
 
 <div id="resizeHandle"></div>
 
-<div class="wrap">
-
+<div class="scroller">
   <div class="grid" id="grid">
-
-    <div class="cell hdr taskhead">
-      TASK
-    </div>
-
-    <div class="cell hdr acct">
-      MAIN
-    </div>
-
-    <div class="cell hdr acct">
-      F1
-    </div>
-
-    <div class="cell hdr acct">
-      F2
-    </div>
-
-    <div class="cell hdr acct">
-      F3
-    </div>
-
-    <div class="cell hdr acct">
-      F4
-    </div>
-
-    <div class="cell hdr acct">
-      F5
-    </div>
-
-    <div class="cell hdr skiphead">
-      SKIP
-    </div>
-
+    <div class="cell hdr taskhead">TASK</div>
+    <div class="cell hdr acct">MAIN</div><div class="cell hdr acct">FARM1</div><div class="cell hdr acct">FARM2</div>
+    <div class="cell hdr acct">FARM3</div><div class="cell hdr acct">FARM4</div><div class="cell hdr acct">FARM5</div>
+    <div class="cell hdr skiphead">SKIP</div>
   </div>
-
+  <div class="controls">
+    <button id="checkAll">CHECK ACTIVE</button>
+    <button id="exportBottom">EXPORT BACKUP</button>
+  </div>
 </div>
 
 <script>
+const STATE_KEY="lastz_ops_state", WIDTH_KEY="lastz_ops_task_width", SETTINGS_KEY="lastz_ops_settings";
 
-const STORAGE_KEY =
-  "fatl-lastz-ops-v4";
-
-const WIDTH_KEY =
-  "fatl-lastz-task-width";
-
-const ACCOUNTS = [
-  "Main",
-  "Farm1",
-  "Farm2",
-  "Farm3",
-  "Farm4",
-  "Farm5"
+const baseTasks=[
+{name:"Alliance Tech"},{name:"Area Exploration"},{name:"Arena"},
+{name:"Battlefield Breakout",schedule:"weekend"},{name:"Black Market"},{name:"Boomer Auto-Join ON"},
+{name:"Boomers"},{name:"Bounties (Personal)"},{name:"Bounties (Plunder)"},{name:"FarmLand"},
+{name:"Freebies"},{name:"Duel"},{name:"Tyrant ON"},{name:"Builder"},{name:"FuryLord"},{name:"Hero Battlefield"},{name:"Hero Initiative"},{name:"Hospital"},
+{name:"Idle Rewards"},{name:"Intercity Trucks Looted"},{name:"Intercity Trucks Sent 3"},{name:"Intercity Trucks Sent 4"},
+{name:"LumberYard"},{name:"Mines Melee 123"},{name:"Mines Melee 4"},{name:"Prime Recruits"},{name:"Radar"},
+{name:"Recruit Refugees"},{name:"Research"},{name:"Saga",schedule:"weekend"},{name:"Treasure Of The Day"},{name:"VIP Freebies"},
+{name:"FP: Tech",schedule:"wednesday"},{name:"FP: Tank"},{name:"FP: Hero"},{name:"FP: Shelter"},{name:"FP: Army"},
+{name:"Dino Rescue"},{name:"Egg Lab"},{name:"Dino Feed"},{name:"Ferns"},{name:"Badges"},{name:"Buildings"}
 ];
 
-const generalTasks = [
-
-  {name:"Alliance Tech"},
-
-  {name:"Area Exploration"},
-
-  {name:"Arena"},
-
-  {
-    name:"Battlefield Breakout",
-    schedule:"weekend"
-  },
-
-  {name:"Black Market"},
-
-  {name:"Boomer Auto-Join ON"},
-
-  {name:"Boomers"},
-
-  {name:"Bounties (Personal)"},
-
-  {name:"Bounties (Plunder)"},
-
-  {name:"FarmLand"},
-
-  {
-    name:"FP: Tech",
-    schedule:"wednesday"
-  },
-
-  {name:"FP: Tank"},
-
-  {name:"FP: Hero"},
-
-  {name:"FP: Shelter"},
-
-  {name:"FP: Army"},
-
-  {name:"FuryLord"},
-
-  {name:"Hero Battlefield"},
-
-  {name:"Hero Initiative"},
-
-  {name:"Hospital"},
-
-  {name:"Idle Rewards"},
-
-  {name:"Intercity Trucks Looted"},
-
-  {name:"Intercity Trucks Sent 3"},
-
-  {name:"Intercity Trucks Sent 4"},
-
-  {name:"LumberYard"},
-
-  {name:"Mines Melee 123"},
-
-  {name:"Mines Melee 4"},
-
-  {name:"Prime Recruits"},
-
-  {
-    name:"Radar",
-    schedule:"radar"
-  },
-
-  {name:"Recruit Refugees"},
-
-  {name:"Research"},
-
-  {
-    name:"Saga",
-    schedule:"weekend"
-  },
-
-  {name:"Store Check-In"},
-
-  {
-    name:"Treasure Of The Day",
-    mainOnly:true
-  },
-
-  {name:"VIP Freebies"},
-
-  {name:"Freebies"},
-
-  {name:"Duel"},
-
-  {name:"Tyrant ON"},
-
-  {name:"Builder"}
-
+const weeklyTasks=[
+{name:"Store Check-In",weekly:true},{name:"Villa Vouchers",weekly:true},{name:"Send 10 Gifts",weekly:true},{name:"Spend Bio Eggs",weekly:true}
 ];
 
-const seasonTasks = [
-
-  {name:"Dino Rescue"},
-
-  {name:"Egg Lab"},
-
-  {name:"Dino Feed"},
-
-  {name:"Ferns"},
-
-  {name:"Badges"},
-
-  {name:"Buildings"}
-
-];
-
-let state = {
-  checks:{}
-};
-
-try{
-
-  const loaded =
-    JSON.parse(
-      localStorage.getItem(STORAGE_KEY)
-      || "{}"
-    );
-
-  if(
-    loaded
-    &&
-    typeof loaded === "object"
-  ){
-
-    state =
-      Object.assign(
-        state,
-        loaded
-      );
-
-  }
-
-}catch(e){}
-
-const grid =
-  document.getElementById("grid");
-
-const status =
-  document.getElementById("status");
-
-function today(){
-
-  return new Date().getDay();
-
-}
-
-function taskHidden(task){
-
-  const day = today();
-
-  if(
-    task.schedule === "wednesday"
-  ){
-
-    return day !== 3;
-
-  }
-
-  if(
-    task.schedule === "weekend"
-  ){
-
-    return !(
-      day === 0
-      ||
-      day === 6
-    );
-
-  }
-
-  if(
-    task.schedule === "radar"
-  ){
-
-    /*
-      Monday is confirmed.
-
-      Add second Radar day later
-      when remembered.
-    */
-
-    return day !== 1;
-
-  }
-
-  return false;
-
-}
-
-function taskForcedChecked(
-  task,
-  account
-){
-
-  if(
-    account === "Farm4"
-    ||
-    account === "Farm5"
-  ){
-
-    return true;
-
-  }
-
-  if(
-    task.mainOnly
-    &&
-    account !== "Main"
-  ){
-
-    return true;
-
-  }
-
-  if(
-    taskHidden(task)
-  ){
-
-    return true;
-
-  }
-
-  return false;
-
-}
-
-function storageKey(
-  task,
-  account
-){
-
-  return (
-    task.name
-    +
-    "|"
-    +
-    account
-  );
-
-}
-
-function saveState(){
-
-  try{
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(state)
-    );
-
-    status.textContent =
-      "SAVED";
-
-  }catch(e){
-
-    status.textContent =
-      "SAVE ERROR";
-
-  }
-
-}
-
-function addSection(
-  title,
-  tasks
-){
-
-  const taskSection =
-    document.createElement("div");
-
-  taskSection.className =
-    "cell task section";
-
-  taskSection.textContent =
-    title;
-
-  grid.appendChild(
-    taskSection
-  );
-
-  for(
-    let c = 0;
-    c < 7;
-    c++
-  ){
-
-    const sectionCell =
-      document.createElement("div");
-
-    sectionCell.className =
-      "cell section";
-
-    if(c === 0){
-
-      sectionCell.textContent =
-        title;
-
-    }
-
-    grid.appendChild(
-      sectionCell
-    );
-
-  }
-
-  tasks.forEach(task=>{
-
-    if(
-      taskHidden(task)
-    ){
-
-      return;
-
-    }
-
-    addTaskRow(task);
-
-  });
-
-}
-
-function addTaskRow(task){
-
-  const taskCell =
-    document.createElement("div");
-
-  taskCell.className =
-    "cell task";
-
-  taskCell.textContent =
-    task.name;
-
-  grid.appendChild(
-    taskCell
-  );
-
-  ACCOUNTS.forEach(account=>{
-
-    const cell =
-      document.createElement("div");
-
-    cell.className =
-      "cell";
-
-    const checkbox =
-      document.createElement("input");
-
-    checkbox.type =
-      "checkbox";
-
-    checkbox.dataset.task =
-      task.name;
-
-    checkbox.dataset.account =
-      account;
-
-    const forced =
-      taskForcedChecked(
-        task,
-        account
-      );
-
-    if(forced){
-
-      checkbox.checked =
-        true;
-
-      checkbox.disabled =
-        true;
-
-    }else{
-
-      checkbox.checked =
-        !!state.checks[
-          storageKey(
-            task,
-            account
-          )
-        ];
-
-    }
-
-    checkbox.addEventListener(
-      "change",
-      ()=>{
-
-        state.checks[
-          storageKey(
-            task,
-            account
-          )
-        ] =
-          checkbox.checked;
-
-        saveState();
-
-      }
-    );
-
-    cell.appendChild(
-      checkbox
-    );
-
-    grid.appendChild(
-      cell
-    );
-
-  });
-
-  const skipCell =
-    document.createElement("div");
-
-  skipCell.className =
-    "cell";
-
-  const skip =
-    document.createElement("input");
-
-  skip.type =
-    "checkbox";
-
-  skip.addEventListener(
-    "change",
-    ()=>{
-
-      ACCOUNTS.forEach(
-        account=>{
-
-          if(
-            taskForcedChecked(
-              task,
-              account
-            )
-          ){
-
-            return;
-
-          }
-
-          state.checks[
-            storageKey(
-              task,
-              account
-            )
-          ] =
-            skip.checked;
-
-        }
-      );
-
-      saveState();
-
-      render();
-
-    }
-  );
-
-  skipCell.appendChild(
-    skip
-  );
-
-  grid.appendChild(
-    skipCell
-  );
-
-}
-
-function clearRows(){
-
-  while(
-    grid.children.length > 8
-  ){
-
-    grid.removeChild(
-      grid.lastChild
-    );
-
-  }
-
-}
+let settings=loadSettings(), state=loadState(), tasks=[];
+const grid=document.getElementById("grid"), savedLabel=document.getElementById("saved"), settingsPanel=document.getElementById("settingsPanel");
+document.getElementById("day7Select").value=String(settings.day7);
+
+function loadSettings(){try{return Object.assign({day7:0},JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}"))}catch(e){return {day7:0}}}
+function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}
+function buildTasksForToday(){const d=new Date().getDay(),a=[...baseTasks];if(d===Number(settings.day7))a.push(...weeklyTasks);return a}
+function autoChecked(t){const d=new Date().getDay();if(t.schedule==="wednesday")return d!==3;if(t.schedule==="weekend")return !(d===0||d===6);return false}
+function defaultRow(t){const a=autoChecked(t);return {acct:[a,a,a,a,true,true],skip:a}}
+function loadState(){try{const r=localStorage.getItem(STATE_KEY);return r?JSON.parse(r):{}}catch(e){return {}}}
+function normalize(){tasks.forEach(t=>{if(!state[t.name])state[t.name]=defaultRow(t);if(!Array.isArray(state[t.name].acct))state[t.name].acct=defaultRow(t).acct;state[t.name].acct[4]=true;state[t.name].acct[5]=true})}
+function saveState(){try{localStorage.setItem(STATE_KEY,JSON.stringify(state));savedLabel.textContent="SAVED";clearTimeout(saveState.t);saveState.t=setTimeout(()=>savedLabel.textContent="AUTO-SAVED",700);idbSave({state,settings,width:getComputedStyle(document.documentElement).getPropertyValue("--taskW").trim()})}catch(e){savedLabel.textContent="SAVE ERROR"}}
+function idbSave(p){try{const r=indexedDB.open("LastZOopsBackup",1);r.onupgradeneeded=()=>r.result.createObjectStore("backup");r.onsuccess=()=>r.result.transaction("backup","readwrite").objectStore("backup").put(p,"latest")}catch(e){}}
+function clearRows(){[...grid.children].slice(8).forEach(n=>n.remove())}
+function esc(s){return s.replace(/\\/g,"\\\\").replace(/"/g,'\\"')}
 
 function render(){
-
-  clearRows();
-
-  addSection(
-    "GENERAL",
-    generalTasks
-  );
-
-  addSection(
-    "SEASON TASKS",
-    seasonTasks
-  );
-
-}
-
-document
-.getElementById("newDay")
-.addEventListener(
-  "click",
-  ()=>{
-
-    const confirmed =
-      confirm(
-        "Start a NEW DAY?\n\nThis will clear today's active checkmarks."
-      );
-
-    if(
-      !confirmed
-    ){
-
-      return;
-
+  clearRows();tasks=buildTasksForToday();normalize();
+  tasks.forEach(t=>{
+    const tc=document.createElement("div");tc.className="cell task";tc.textContent=t.name;grid.appendChild(tc);
+    for(let c=0;c<6;c++){
+      const cell=document.createElement("div");cell.className="cell checkcell";
+      const cb=document.createElement("input");cb.type="checkbox";cb.dataset.task=t.name;cb.dataset.col=c;cb.dataset.role="acct";
+      if(c>=4){cb.checked=true;cb.disabled=true;state[t.name].acct[c]=true}else cb.checked=!!state[t.name].acct[c];
+      cb.addEventListener("change",()=>{state[t.name].acct[c]=cb.checked;const done=[0,1,2,3].every(i=>!!state[t.name].acct[i]);state[t.name].skip=done;const sk=document.querySelector(`input[data-task="${esc(t.name)}"][data-role="skip"]`);if(sk)sk.checked=done;saveState()});
+      cell.appendChild(cb);grid.appendChild(cell);
     }
-
-    state.checks = {};
-
-    saveState();
-
-    render();
-
-  }
-);
-
-document
-.getElementById("backup")
-.addEventListener(
-  "click",
-  ()=>{
-
-    const payload = {
-
-      app:
-        "FATL LastZ Ops",
-
-      exportedAt:
-        new Date()
-        .toISOString(),
-
-      state
-
-    };
-
-    const blob =
-      new Blob(
-        [
-          JSON.stringify(
-            payload,
-            null,
-            2
-          )
-        ],
-        {
-          type:
-            "application/json"
-        }
-      );
-
-    const link =
-      document.createElement("a");
-
-    link.href =
-      URL.createObjectURL(
-        blob
-      );
-
-    link.download =
-      "LastZ_Ops_Backup.json";
-
-    document.body
-    .appendChild(
-      link
-    );
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(
-      ()=>{
-        URL.revokeObjectURL(
-          link.href
-        );
-      },
-      1000
-    );
-
-  }
-);
-
-const resizeHandle =
-  document.getElementById(
-    "resizeHandle"
-  );
-
-let dragging =
-  false;
-
-function setTaskWidth(
-  px,
-  persist = true
-){
-
-  const min =
-    62;
-
-  const max =
-    260;
-
-  px =
-    Math.max(
-      min,
-      Math.min(
-        max,
-        px
-      )
-    );
-
-  px =
-    Math.round(px);
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--taskW",
-    px + "px"
-  );
-
-  resizeHandle
-  .style
-  .left =
-    (
-      px - 9
-    )
-    +
-    "px";
-
-  if(persist){
-
-    localStorage.setItem(
-      WIDTH_KEY,
-      String(px)
-    );
-
-  }
-
+    const sc=document.createElement("div");sc.className="cell skipcell";
+    const sk=document.createElement("input");sk.type="checkbox";sk.dataset.task=t.name;sk.dataset.role="skip";sk.checked=!!state[t.name].skip;
+    sk.addEventListener("change",()=>{state[t.name].skip=sk.checked;for(let c=0;c<4;c++){state[t.name].acct[c]=sk.checked;const b=document.querySelector(`input[data-task="${esc(t.name)}"][data-col="${c}"]`);if(b)b.checked=sk.checked}saveState()});
+    sc.appendChild(sk);grid.appendChild(sc);
+  });
 }
 
-const savedWidth =
-  Number(
-    localStorage.getItem(
-      WIDTH_KEY
-    )
-  );
+function newDay(){if(!confirm("Start a new day and clear today's checklist?"))return;state={};tasks=buildTasksForToday();tasks.forEach(t=>state[t.name]=defaultRow(t));render();saveState()}
+document.getElementById("newDayTop").onclick=newDay;
+document.getElementById("checkAll").onclick=()=>{tasks.forEach(t=>{for(let c=0;c<4;c++)state[t.name].acct[c]=true;state[t.name].skip=true});render();saveState()};
+document.getElementById("settingsBtn").onclick=()=>settingsPanel.classList.toggle("show");
+document.getElementById("closeSettings").onclick=()=>settingsPanel.classList.remove("show");
+document.getElementById("day7Select").onchange=e=>{settings.day7=Number(e.target.value);saveSettings();tasks=buildTasksForToday();normalize();render();saveState()};
 
-if(savedWidth){
-
-  setTaskWidth(
-    savedWidth,
-    false
-  );
-
+function exportBackup(){
+  const p={app:"LastZ Ops",version:3,exportedAt:new Date().toISOString(),settings,state,width:getComputedStyle(document.documentElement).getPropertyValue("--taskW").trim()};
+  const b=new Blob([JSON.stringify(p,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="LastZ_Ops_Backup.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
 }
+document.getElementById("exportBtn").onclick=exportBackup;document.getElementById("exportBottom").onclick=exportBackup;
+document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
+document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!d.state)throw 0;if(!confirm("Import this backup and replace current checklist data?"))return;state=d.state;if(d.settings){settings=Object.assign({day7:0},d.settings);saveSettings()}if(d.width){document.documentElement.style.setProperty("--taskW",d.width);localStorage.setItem(WIDTH_KEY,d.width)}document.getElementById("day7Select").value=String(settings.day7);render();saveState();settingsPanel.classList.remove("show")}catch(x){alert("Backup import failed.")}e.target.value=""};
 
-resizeHandle
-.addEventListener(
-  "pointerdown",
-  e=>{
+const handle=document.getElementById("resizeHandle");let dragging=false;
+function setTaskWidth(px,p=true){const min=72,max=Math.min(window.innerWidth*.75,520);px=Math.round(Math.max(min,Math.min(max,px)));document.documentElement.style.setProperty("--taskW",px+"px");if(p)localStorage.setItem(WIDTH_KEY,String(px))}
+const sw=Number(localStorage.getItem(WIDTH_KEY));if(sw)setTaskWidth(sw,false);
+handle.addEventListener("pointerdown",e=>{dragging=true;handle.setPointerCapture(e.pointerId)});
+handle.addEventListener("pointermove",e=>{if(dragging)setTaskWidth(e.clientX)});
+handle.addEventListener("pointerup",e=>{dragging=false;try{handle.releasePointerCapture(e.pointerId)}catch(_){};saveState()});
+handle.addEventListener("pointercancel",()=>dragging=false);
 
-    dragging =
-      true;
-
-    resizeHandle
-    .setPointerCapture(
-      e.pointerId
-    );
-
-  }
-);
-
-resizeHandle
-.addEventListener(
-  "pointermove",
-  e=>{
-
-    if(
-      !dragging
-    ){
-
-      return;
-
-    }
-
-    setTaskWidth(
-      e.clientX
-    );
-
-  }
-);
-
-resizeHandle
-.addEventListener(
-  "pointerup",
-  e=>{
-
-    dragging =
-      false;
-
-    try{
-
-      resizeHandle
-      .releasePointerCapture(
-        e.pointerId
-      );
-
-    }catch(_){}
-
-  }
-);
-
-resizeHandle
-.addEventListener(
-  "pointercancel",
-  ()=>{
-
-    dragging =
-      false;
-
-  }
-);
-
-render();
-
-setTimeout(
-  ()=>{
-    document
-    .getElementById(
-      "splash"
-    )
-    .classList
-    .add(
-      "hide"
-    );
-  },
-  650
-);
-
-if(
-  "serviceWorker"
-  in navigator
-){
-
-  navigator
-  .serviceWorker
-  .register(
-    "./sw.js"
-  )
-  .catch(
-    ()=>{}
-  );
-
-}
-
+tasks=buildTasksForToday();normalize();render();saveState();
+setTimeout(()=>{const x=document.getElementById("splash");if(x){x.style.opacity="0";setTimeout(()=>x.remove(),400)}},3000);
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 </script>
-
 </body>
 </html>
